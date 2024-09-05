@@ -1,33 +1,43 @@
-import React, { useState } from 'react';
-import Img from '../Screens/Bag1.png';
-import Imgs from '../Screens/Bag2.png';
+import React, { useState, useEffect } from 'react';
+import Img from '../Screens/Bag1.png'
+import Imgs from '../Screens/Bag2.png'
 import { FaRegEdit, FaTrashAlt } from 'react-icons/fa';
-import Swal from 'sweetalert2';  // Import SweetAlert
+import Swal from 'sweetalert2'; // Import SweetAlert
 
 const ProductManagement = () => {
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: 'UltimateFix',
-      category: 'Tailes Adhesive Wall & Floor',
-      quality: 'A++',
-      mrp: 799,
-      rate: 499,
-      image: Img,
-    },
-    {
-      id: 2,
-      name: 'UltimateFix',
-      category: 'Tailes Adhesive Wall & Floor',
-      quality: 'A++',
-      mrp: 799,
-      rate: 499,
-      image: Imgs,
-    },
-  ]);
+  // Initialize products state with localStorage
+  const [products, setProducts] = useState(() => {
+    const savedProducts = localStorage.getItem('products');
+    return savedProducts ? JSON.parse(savedProducts) : [
+      {
+        id: 1,
+        name: 'UltimateFix',
+        category: 'Tailes Adhesive Wall & Floor',
+        quality: 'A++',
+        mrp: 799,
+        rate: 499,
+        image: Img,
+      },
+      {
+        id: 2,
+        name: 'UltimateFix',
+        category: 'Tailes Adhesive Wall & Floor',
+        quality: 'A++',
+        mrp: 799,
+        rate: 499,
+        image: Imgs,
+      },
+    ];
+  });
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newProduct, setNewProduct] = useState({ name: '', category: '', quality: '', mrp: '', rate: '', image: null });
   const [editingProductId, setEditingProductId] = useState(null);
+
+  // Save products to localStorage whenever products state changes
+  useEffect(() => {
+    localStorage.setItem('products', JSON.stringify(products));
+  }, [products]);
 
   const openModal = (product = {}) => {
     setNewProduct(product);
@@ -79,7 +89,6 @@ const ProductManagement = () => {
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: "",
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
@@ -107,9 +116,9 @@ const ProductManagement = () => {
             <button
               type="button"
               onClick={() => openModal()}
-              className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+ className="bg-blue-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              Add new Product
+              Add New Product
             </button>
           </div>
         </div>
@@ -179,5 +188,3 @@ const ProductManagement = () => {
 };
 
 export default ProductManagement;
-
-
