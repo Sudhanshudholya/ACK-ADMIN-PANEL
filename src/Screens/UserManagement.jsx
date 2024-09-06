@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaRegEdit, FaTrashAlt } from 'react-icons/fa'; // Importing icons
+import { FaRegEdit, FaTrashAlt } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 
 const employeesData = [
@@ -31,24 +31,22 @@ const UserManagement = () => {
     role: '',
   });
 
-  // Load data from localStorage when component mounts
+  
   useEffect(() => {
     const storedEmployees = JSON.parse(localStorage.getItem('employees')) || [];
     setEmployees(storedEmployees);
   }, []);
 
-  // Save employees to localStorage whenever employees state changes
+
   useEffect(() => {
     localStorage.setItem('employees', JSON.stringify(employees));
   }, [employees]);
 
-  // Handle input change for the new employee form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewEmployee({ ...newEmployee, [name]: value });
   };
 
-  // Handle adding or editing an employee
   const handleSaveEmployee = () => {
     if (isEditing) {
       setEmployees(
@@ -69,7 +67,6 @@ const UserManagement = () => {
     });
   };
 
-  // Handle editing an employee
   const handleEditEmployee = (employee) => {
     setCurrentEmployee(employee);
     setNewEmployee(employee);
@@ -77,7 +74,6 @@ const UserManagement = () => {
     setShowModal(true);
   };
 
-  // Handle deleting an employee
   const handleDeleteEmployee = (employee) => {
     Swal.fire({
       title: 'Are you sure?',

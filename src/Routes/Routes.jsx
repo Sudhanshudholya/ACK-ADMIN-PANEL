@@ -1,6 +1,5 @@
-// src/App.js
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../Components/Layout';
 import UserManagement from '../Screens/UserManagement';
 import Sales from '../Screens/Sales';
@@ -11,25 +10,31 @@ import ABPCommission from '../Screens/ABPCommission';
 import ServiceManagement from '../Screens/ServiceManagement';
 import Login from '../Screens/Login';
 
+const router = createBrowserRouter([
+
+  {
+    path: '/login',
+    element: <Login />,
+  },
+
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      { path: '/user-management', element: <UserManagement /> },
+      { path: '/sales', element: <Sales /> },
+      { path: '/content-management', element: <ContentManagement /> },
+      { path: '/product-management', element: <ProductManagement /> },
+      { path: '/token-management', element: <TokenManagement /> },
+      { path: '/abp-commission', element: <ABPCommission /> },
+      { path: '/service-management', element: <ServiceManagement /> },
+    ],
+  },
+]);
+
+export default router
 
 
-function Router() {
-  return (
-    <BrowserRouter>
-      <Routes>
-          {/* <Route path='/login' element={<Login/>}/>         */}
-          <Route path="/" element={<Layout />}>
-          <Route path='/user-management' element={<UserManagement />} />
-          <Route path="/sales" element={<Sales />} />
-          <Route path="/content-management" element={<ContentManagement />} />
-          <Route path="/product-management" element={<ProductManagement />} />
-          <Route path='/token-management' element={<TokenManagement/>}/>
-          <Route path='/abp-commission' element={<ABPCommission/>}/>
-          <Route path='/service-management' element={<ServiceManagement/>}/>    
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );
-}
 
-export default Router;
+
+
