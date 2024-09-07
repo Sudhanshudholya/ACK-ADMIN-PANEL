@@ -29,6 +29,7 @@ const UserManagement = () => {
     name: '',
     phone: '',
     role: '',
+    action: ''
   });
 
   

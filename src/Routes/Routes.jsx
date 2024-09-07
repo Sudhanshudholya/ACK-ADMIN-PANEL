@@ -13,21 +13,21 @@ import Login from '../Screens/Login';
 const router = createBrowserRouter([
 
   {
-    path: '/login',
+    path: '/',
     element: <Login />,
   },
 
   {
-    path: '/',
+    path: '/layout',
     element: <Layout />,
     children: [
-      { path: '/user-management', element: <UserManagement /> },
-      { path: '/sales', element: <Sales /> },
-      { path: '/content-management', element: <ContentManagement /> },
-      { path: '/product-management', element: <ProductManagement /> },
-      { path: '/token-management', element: <TokenManagement /> },
-      { path: '/abp-commission', element: <ABPCommission /> },
-      { path: '/service-management', element: <ServiceManagement /> },
+      { path: 'user-management', element: <UserManagement /> },
+      { path: 'sales', element: <Sales /> },
+      { path: 'content-management', element: <ContentManagement /> },
+      { path: 'product-management', element: <ProductManagement /> },
+      { path: 'token-management', element: <TokenManagement /> },
+      { path: 'abp-commission', element: <ABPCommission /> },
+      { path: 'service-management', element: <ServiceManagement /> },
     ],
   },
 ]);

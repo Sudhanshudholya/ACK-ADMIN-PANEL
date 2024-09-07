@@ -14,43 +14,43 @@ const Sidebar = () => {
                 />
             </div>
 
-            <Link to="/user-management">
+            <Link to="user-management">
                 <div className="p-4 hover:bg-blue-700">
                     User Management
                 </div>
             </Link>
 
-            <Link to="/sales">
+            <Link to="sales">
                 <div className="p-4 hover:bg-blue-700">
                     Sales
                 </div>
             </Link>
 
-            <Link to="/content-management">
+            <Link to="content-management">
                 <div className="p-4 hover:bg-blue-700">
                     Content Management
                 </div>
             </Link>
 
-            <Link to="/product-management">
+            <Link to="product-management">
                 <div className="p-4 hover:bg-blue-700">
                     Product Management
                 </div>
             </Link>
 
-            <Link to="/token-management">
+            <Link to="token-management">
                 <div className="p-4 hover:bg-blue-700">
                     Token Management
                 </div>
             </Link>
 
-            <Link to="/abp-commission">
+            <Link to="abp-commission">
                 <div className="p-4 hover:bg-blue-700">
                     ABP Commission
                 </div>
             </Link>
 
-            <Link to="/service-management">
+            <Link to="service-management">
                 <div className="p-4 hover:bg-blue-700">
                     Service Management
                 </div>
