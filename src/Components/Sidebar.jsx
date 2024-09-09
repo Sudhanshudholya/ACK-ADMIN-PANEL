@@ -20,6 +20,12 @@ const Sidebar = () => {
                 </div>
             </Link>
 
+            <Link to="pre-sales">
+                <div className="p-4 hover:bg-blue-700">
+                    Pre sales
+                </div>
+            </Link>
+
             <Link to="sales">
                 <div className="p-4 hover:bg-blue-700">
                     Sales
@@ -47,6 +53,12 @@ const Sidebar = () => {
             <Link to="abp-commission">
                 <div className="p-4 hover:bg-blue-700">
                     ABP Commission
+                </div>
+            </Link>
+
+            <Link to="invoice">
+                <div className="p-4 hover:bg-blue-700">
+                    Invoice Management
                 </div>
             </Link>
 

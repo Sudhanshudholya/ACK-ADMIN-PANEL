@@ -16,13 +16,15 @@ const PASSWORD = "1234567890";
 const Login = () => {
 
     const navigate = useNavigate();
-    const [passwordVisible, setPasswordVisible] = useState(false);
+
+    const [password, setPassword] = useState(false);
 
     const togglePassword = () => {
-        setPasswordVisible(!passwordVisible);
-    };
+        setPassword(!password)
+    }
 
     return (
+        
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="w-full max-w-sm p-6 bg-white shadow-md rounded-lg">
                 <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
@@ -32,7 +34,7 @@ const Login = () => {
                     validationSchema={loginFormValidationSchema}
                     onSubmit={(values, { setSubmitting }) => {
                         if (values.username === USERNAME && values.password === PASSWORD) {
-                            // Save both username and password to localStorage
+
                             localStorage.setItem('user', JSON.stringify({ username: values.username, password: values.password }));
 
                             toasts.successMsg("Login successfully");
@@ -41,7 +43,7 @@ const Login = () => {
                             }, 2000);
                         } else {
                             toasts.errorMsg("Invalid username or password");
-                            navigate('/login');
+                            navigate('/');
                         }
                         setSubmitting(false);
                     }}
@@ -65,7 +67,7 @@ const Login = () => {
                             <div className="relative">
                                 <label>Password:</label>
                                 <input
-                                    type={passwordVisible ? "text" : "password"}
+                                    type={password ? "text" : "password"}
                                     name="password"
                                     value={values.password}
                                     placeholder="Password"
@@ -79,7 +81,7 @@ const Login = () => {
                                     className="absolute right-2 bottom-1 transform -translate-y-1/2 cursor-pointer text-gray-400"
                                     onClick={togglePassword}
                                 >
-                                    {passwordVisible ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                                    {password ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
                                 </span>
                             </div>
 

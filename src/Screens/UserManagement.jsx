@@ -3,6 +3,7 @@ import { FaRegEdit, FaTrashAlt } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 
 const employeesData = [
+
   {
     id: "667bd67a55b54416ebf842f7",
     email: 'sudhanshu@gmail.com',
@@ -10,6 +11,7 @@ const employeesData = [
     phone: "1234567890",
     role: 'Contractor',
   },
+
   {
     id: "667bd6ab55b54416ebf842f9",
     email: 'ransh@gmail.com',
@@ -17,7 +19,8 @@ const employeesData = [
     phone: "1234567890",
     role: 'Contractor',
   },
-];
+
+]
 
 const UserManagement = () => {
   const [employees, setEmployees] = useState(employeesData);
@@ -29,10 +32,10 @@ const UserManagement = () => {
     name: '',
     phone: '',
     role: '',
-    action: ''
+    action: '',
   });
 
-  
+
   useEffect(() => {
     const storedEmployees = JSON.parse(localStorage.getItem('employees')) || [];
     setEmployees(storedEmployees);

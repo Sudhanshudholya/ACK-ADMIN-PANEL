@@ -2,11 +2,12 @@ import React from 'react'
 
 const ServiceManagement = () => {
   return (
+   <div>
     <div>
-      <h1>Future Savings Funds</h1>
-
-      <p></p>
+      Service management
+      <p>We provides you mutual fund services</p>
     </div>
+   </div>
   )
 }
 
