@@ -11,185 +11,137 @@
 // export default ContentManagement
 
 import React, { useState } from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';
 
-const ContentManagement = () => {
-  const [contents, setContents] = useState([]);
-  const [newContent, setNewContent] = useState({
-    id: null,
+const CompanyManagement = () => {
+  const [companyInfo, setCompanyInfo] = useState({
     name: '',
     description: '',
-    mission: '',
-    vision: '',
-    values: '',
-    image: null,
+    address: '',
+   
   });
-  const [editingContentId, setEditingContentId] = useState(null);
+  const [companies, setCompanies] = useState([]);
+  const [editingIndex, setEditingIndex] = useState(null);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewContent({ ...newContent, [name]: value });
+  // Handle input changes
+  const handleChange = (e) => {
+    setCompanyInfo({ ...companyInfo, [e.target.name]: e.target.value });
   };
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    setNewContent({ ...newContent, image: URL.createObjectURL(file) });
-  };
-
-  // Save or Update content
-  const handleSave = () => {
-    if (editingContentId) {
-      // Update existing content
-      setContents(
-        contents.map((content) =>
-          content.id === editingContentId ? { ...newContent, id: editingContentId } : content
-        )
+  // Add or update company information
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (editingIndex !== null) {
+      const updatedCompanies = companies.map((company, index) =>
+        index === editingIndex ? companyInfo : company
       );
-      setEditingContentId(null);
+      setCompanies(updatedCompanies);
+      setEditingIndex(null);
     } else {
-      // Add new content
-      setContents([...contents, { ...newContent, id: Date.now() }]);
+      setCompanies([...companies, companyInfo]);
     }
-    setNewContent({
-      id: null,
-      name: '',
-      description: '',
-      mission: '',
-      vision: '',
-      values: '',
-      image: null,
-    });
+    setCompanyInfo({ name: '', description: '', address: '' });
   };
 
-  // Delete content
-  const handleDelete = (id) => {
-    setContents(contents.filter((content) => content.id !== id));
+  // Edit company information
+  const handleEdit = (index) => {
+    setEditingIndex(index);
+    setCompanyInfo(companies[index]);
   };
 
-  // Edit content
-  const handleEdit = (content) => {
-    setNewContent(content);
-    setEditingContentId(content.id);
+  // Delete company information
+  const handleDelete = (index) => {
+    const updatedCompanies = companies.filter((_, i) => i !== index);
+    setCompanies(updatedCompanies);
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold mb-4">Content Management</h2>
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Company Information Management</h1>
 
-      {/* Form for Adding/Editing Content */}
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-2">{editingContentId ? 'Edit Content' : 'Add New Content'}</h3>
-
+      {/* Company Information Form */}
+      <form onSubmit={handleSubmit} className="bg-gray-100 p-4 mb-4 shadow-md rounded">
         <div className="mb-4">
-          <label className="block font-medium text-gray-700">Company Name:</label>
+          <label className="block text-gray-700">Company Name:</label>
           <input
             type="text"
             name="name"
-            value={newContent.name}
-            placeholder="Enter company name"
-            onChange={handleInputChange}
-            className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+            value={companyInfo.name}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded"
+            required
           />
         </div>
 
         <div className="mb-4">
-          <label className="block font-medium text-gray-700">Description:</label>
-          <textarea
+          <label className="block text-gray-700">Description:</label>
+          <input
+            type="text"
             name="description"
-            value={newContent.description}
-            placeholder="Enter company description"
-            onChange={handleInputChange}
-            className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+            value={companyInfo.description}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded"
+            required
           />
         </div>
 
         <div className="mb-4">
-          <label className="block font-medium text-gray-700">Mission:</label>
-          <textarea
-            name="mission"
-            value={newContent.mission}
-            placeholder="Enter company mission"
-            onChange={handleInputChange}
-            className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+          <label className="block text-gray-700">Address:</label>
+          <input
+            type="text"
+            name="address"
+            value={companyInfo.address}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded"
+            required
           />
         </div>
-
-        <div className="mb-4">
-          <label className="block font-medium text-gray-700">Vision:</label>
-          <textarea
-            name="vision"
-            value={newContent.vision}
-            placeholder="Enter company vision"
-            onChange={handleInputChange}
-            className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block font-medium text-gray-700">Core Values:</label>
-          <textarea
-            name="values"
-            value={newContent.values}
-            placeholder="Enter core values"
-            onChange={handleInputChange}
-            className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block font-medium text-gray-700">Company Logo:</label>
-          <input type="file" onChange={handleImageUpload} className="mt-1" />
-          {newContent.image && (
-            <img src={newContent.image} alt="Company Logo" className="mt-2 h-32 w-32 object-cover" />
-          )}
-        </div>
-
+       
+       
         <button
-          onClick={handleSave}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
-          {editingContentId ? 'Update Content' : 'Add Content'}
+          {editingIndex !== null ? 'Update Company' : 'Add Company'}
         </button>
-      </div>
+      </form>
 
-      {/* List of Contents */}
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Company Content List</h3>
-
-        {contents.length > 0 ? (
-          contents.map((content) => (
-            <div key={content.id} className="p-4 border mb-4 rounded-md shadow-sm">
-              <h4 className="text-xl font-bold">{content.name}</h4>
-              <p>{content.description}</p>
-              <p><strong>Mission:</strong> {content.mission}</p>
-              <p><strong>Vision:</strong> {content.vision}</p>
-              <p><strong>Values:</strong> {content.values}</p>
-              {content.image && <img src={content.image} alt="Company Logo" className="mt-2 h-16 w-16 object-cover" />}
-              <div className="flex justify-end space-x-4 mt-4">
+      {/* Company Information Table */}
+      <table className="min-w-full bg-white shadow-md rounded">
+        <thead>
+          <tr className="bg-gray-200">
+            <th className="text-left py-2 px-4">Company Name</th>
+            <th className="text-left py-2 px-4">Description</th>
+            <th className="text-left py-2 px-4">Address</th>
+            <th className="text-left py-2 px-4">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {companies.map((company, index) => (
+            <tr key={index}>
+              <td className="border px-4 py-2">{company.name}</td>
+              <td className="border px-4 py-2">{company.description}</td>
+              <td className="border px-4 py-2">{company.address}</td>
+              <td className="border px-4 py-2">
                 <button
-                  onClick={() => handleEdit(content)}
-                  className="bg-yellow-500 text-white px-4 py-1 rounded-md hover:bg-yellow-600 flex items-center"
+                  onClick={() => handleEdit(index)}
+                  className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 mr-2"
                 >
-                  <FaEdit className="mr-2" /> Edit
+                  Edit
                 </button>
                 <button
-                  onClick={() => handleDelete(content.id)}
-                  className="bg-red-500 text-white px-4 py-1 rounded-md hover:bg-red-600 flex items-center"
+                  onClick={() => handleDelete(index)}
+                  className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
                 >
-                  <FaTrash className="mr-2" /> Delete
+                  Delete
                 </button>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p>No content available. Add some content!</p>
-        )}
-      </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
 
-export default ContentManagement;
-
-
+export default CompanyManagement;
 

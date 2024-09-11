@@ -3,7 +3,7 @@ import React from 'react'
 const Presales = () => {
   return (
     <div>
-      Presales 
+      Pre sales
     </div>
   )
 }

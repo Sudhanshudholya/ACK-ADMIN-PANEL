@@ -6,16 +6,16 @@ const employeesData = [
 
   {
     id: "667bd67a55b54416ebf842f7",
-    email: 'sudhanshu@gmail.com',
     name: 'Sudhanshu',
+    email: 'sudhanshu@gmail.com',
     phone: "1234567890",
     role: 'Contractor',
   },
 
   {
     id: "667bd6ab55b54416ebf842f9",
-    email: 'ransh@gmail.com',
     name: 'Ransh',
+    email: 'ransh@gmail.com',
     phone: "1234567890",
     role: 'Contractor',
   },
@@ -28,8 +28,8 @@ const UserManagement = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentEmployee, setCurrentEmployee] = useState(null);
   const [newEmployee, setNewEmployee] = useState({
-    email: '',
     name: '',
+    email: '',
     phone: '',
     role: '',
     action: '',
@@ -64,8 +64,8 @@ const UserManagement = () => {
     }
     setShowModal(false);
     setNewEmployee({
-      email: '',
       name: '',
+      email: '',
       phone: '',
       role: '',
     });
@@ -110,8 +110,8 @@ const UserManagement = () => {
               type="button"
               onClick={() => {
                 setNewEmployee({
-                  email: '',
                   name: '',
+                  email: '',
                   phone: '',
                   role: '',
                 });
@@ -129,8 +129,8 @@ const UserManagement = () => {
               <thead className="bg-gray-100">
                 <tr>
                   <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">S.No</th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Email</th>
                   <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Name</th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Email</th>
                   <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Contact No.</th>
                   <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Role</th>
                   <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Action</th>
@@ -140,8 +140,8 @@ const UserManagement = () => {
                 {employees.map((employee, index) => (
                   <tr key={employee.email}>
                     <td className="px-6 py-4 text-sm text-gray-600">{index + 1}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{employee.email}</td>
                     <td className="px-6 py-4 text-sm text-gray-600">{employee.name}</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{employee.email}</td>
                     <td className="px-6 py-4 text-sm text-gray-600">{employee.phone}</td>
                     <td className="px-6 py-4 text-sm text-gray-600">{employee.role}</td>
                     <td className="px-6 py-4 text-sm text-gray-600 flex space-x-2">
