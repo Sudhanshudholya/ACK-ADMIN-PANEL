@@ -22,7 +22,7 @@ const employeesData = [
 
 ]
 
-const UserManagement = () => {
+const CustomerManagement = () => {
   const [employees, setEmployees] = useState(employeesData);
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -100,9 +100,9 @@ const UserManagement = () => {
       <section className="mx-auto w-full max-w-7xl px-4 py-4">
         <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
           <div>
-            <h2 className="text-lg font-semibold">User Management</h2>
+            <h2 className="text-lg font-semibold">Customer Management</h2>
             <p className="mt-1 text-sm text-gray-600">
-              Manage your users efficiently. Add, edit, or delete user details.
+              Manage your customer efficiently. Add, edit, or delete customer details.
             </p>
           </div>
           <div>
@@ -119,7 +119,7 @@ const UserManagement = () => {
               }}
               className="bg-blue-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              Add New User
+              Add New Customer
             </button>
           </div>
         </div>
@@ -169,7 +169,7 @@ const UserManagement = () => {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
-            <h3 className="text-lg font-medium text-gray-800">{isEditing ? 'Edit User' : 'Add New User'}</h3>
+            <h3 className="text-lg font-medium text-gray-800">{isEditing ? 'Edit Customer' : 'Add New Customer'}</h3>
             <div className="mt-4 space-y-4">
               <input
                 type="text"
@@ -215,7 +215,7 @@ const UserManagement = () => {
                 onClick={handleSaveEmployee}
                 className="bg-blue-600 text-white px-4 py-2 rounded-md"
               >
-                {isEditing ? 'Save Changes' : 'Add User'}
+                {isEditing ? 'Save Changes' : 'Add Customer'}
               </button>
             </div>
           </div>
@@ -225,5 +225,5 @@ const UserManagement = () => {
   );
 };
 
-export default UserManagement;
+export default CustomerManagement;
 

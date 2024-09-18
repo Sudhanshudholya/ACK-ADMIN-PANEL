@@ -1,14 +1,21 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
+import toasts from "../Toast/Toast";
 import { useNavigate } from "react-router";
-import axios from "axios";
 import { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useLoginMutation } from "../Redux/UserApiSlice";
 
 const Login = () => {
-  const [loginError, setLoginError] = useState(null); // Updated to handle login error
+  const [loginError, setLoginError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const [login] = useLoginMutation()
 
-  // Validation schema for userName and password
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const validationSchema = Yup.object().shape({
     userName: Yup.string().trim().required("Username is required"),
     password: Yup.string().trim().required("Password is required"),
@@ -24,35 +31,25 @@ const Login = () => {
             password: "",
           }}
           validationSchema={validationSchema}
-          onSubmit={async (values, { setSubmitting }) => {
-            setSubmitting(true);
-            setLoginError(null); // Reset error state
+          onSubmit={(values, { setSubmitting }) => {
+            login(values)
+              .then((res) => {
+                if (res.data.status === "OK") {
+                  localStorage.setItem("token", res.data.data.token);
+                  toasts.successMsg("Login Successfully");
+                  navigate("/layout");
+                } else {
+                  toasts.errorMsg(err)
+                }
+              }).catch((err) => {
+                console.log(err)
+                toasts.errorMsg("Invalid Credentials");
+              }).finally(() => {
+                setSubmitting(false);
+                setLoginError(null);
+              })
 
-            try {
-              const res = await axios.post(
-                "https://qkk4fj7d-4000.inc1.devtunnels.ms/admin/adminLogin",
-                values
-              );
 
-              console.log(res)
-
-              // Checking if the response status is OK
-              if (res.data.status === "OK") {
-                // Store token in localStorage
-                localStorage.setItem("token", res.data.data.token);
-
-                // Navigate to transactions page
-                navigate("/layout");
-              } else {
-                // Handle login error with response message
-                setLoginError(res.data.msg || "Invalid username or password");
-              }
-            } catch (err) {
-              console.error("Login error:", err);
-              setLoginError("An error occurred while logging in.");
-            } finally {
-              setSubmitting(false);
-            }
           }}
         >
           {({ isSubmitting }) => (
@@ -79,7 +76,7 @@ const Login = () => {
                 />
               </div>
 
-              <div>
+              <div className="relative">
                 <label
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-700"
@@ -89,11 +86,17 @@ const Login = () => {
                 <Field
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"} // Conditionally toggle password visibility
                   className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                   placeholder="Enter your password"
                   autoComplete="current-password"
                 />
+                <span
+                  className="absolute right-3 top-10 transform -translate-y-1/2 cursor-pointer text-gray-500"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
                 <ErrorMessage
                   name="password"
                   component="div"
@@ -109,9 +112,8 @@ const Login = () => {
 
               <button
                 type="submit"
-                className={`w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ${
-                  isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                className={`w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Logging in..." : "Admin Login"}
