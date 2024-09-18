@@ -390,6 +390,12 @@ const Sidebar = () => {
                         </div>
                     </Link>
 
+                    <Link to="invoice">
+                        <div className="p-4 hover:bg-blue-700">
+                            Invoice
+                        </div>
+                    </Link>
+
                     <Link to="product-management">
                         <div className="p-4 hover:bg-blue-700">
                             Product Management

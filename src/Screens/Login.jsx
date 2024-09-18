@@ -1,114 +1,127 @@
-import React, { useState } from 'react';
-import { Formik } from 'formik';
-import * as yup from 'yup';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import toasts from '../Toast/Toast';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-
-const loginFormValidationSchema = yup.object().shape({
-    username: yup.string().min(5, 'Username should be at least 5 characters').required('Username is required'),
-    password: yup.string().min(8, 'Password should be at least 8 characters').required('Password is required'),
-});
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import * as Yup from "yup";
+import { useNavigate } from "react-router";
+import axios from "axios";
+import { useState } from "react";
 
 const Login = () => {
+  const [loginError, setLoginError] = useState(null); // Updated to handle login error
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  // Validation schema for userName and password
+  const validationSchema = Yup.object().shape({
+    userName: Yup.string().trim().required("Username is required"),
+    password: Yup.string().trim().required("Password is required"),
+  });
 
-    const [password, setPassword] = useState(false);
+  return (
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h1 className="text-2xl font-semibold text-center mb-6">Admin Login</h1>
+        <Formik
+          initialValues={{
+            userName: "",
+            password: "",
+          }}
+          validationSchema={validationSchema}
+          onSubmit={async (values, { setSubmitting }) => {
+            setSubmitting(true);
+            setLoginError(null); // Reset error state
 
-    const togglePassword = () => {
-        setPassword(!password);
-    };
+            try {
+              const res = await axios.post(
+                "https://qkk4fj7d-4000.inc1.devtunnels.ms/admin/adminLogin",
+                values
+              );
 
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="w-full max-w-sm p-6 bg-white shadow-md rounded-lg">
-                <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
+              console.log(res)
 
-                <Formik
-                    initialValues={{ username: "", password: "" }}
-                    validationSchema={loginFormValidationSchema}
-                    onSubmit={async (values, { setSubmitting }) => {
-                        try {
-                            // Send the login request to your backend API
-                            const response = await axios.post('http://192.168.1.26:4000/admin/adminLogin', {
-                                username: values.username,
-                                password: values.password
-                            });
+              // Checking if the response status is OK
+              if (res.data.status === "OK") {
+                // Store token in localStorage
+                localStorage.setItem("token", res.data.data.token);
 
-                            const {code, message } = res.data
-                            
-
-                            if (response.data.success) {
-                                // Store the user data in localStorage
-                                localStorage.setItem('user', JSON.stringify(response.data.user));
-
-                                toasts.successMsg(message);
-                                setTimeout(() => {
-                                    navigate('/layout');
-                                }, 2000);
-                            } else {
-                                toasts.errorMsg("Invalid username or password");
-                            }
-                        } catch (error) {
-                            toasts.errorMsg("An error occurred. Please try again.");
-                        }
-                        setSubmitting(false);
-                    }}
+                // Navigate to transactions page
+                navigate("/layout");
+              } else {
+                // Handle login error with response message
+                setLoginError(res.data.msg || "Invalid username or password");
+              }
+            } catch (err) {
+              console.error("Login error:", err);
+              setLoginError("An error occurred while logging in.");
+            } finally {
+              setSubmitting(false);
+            }
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form className="space-y-4">
+              <div>
+                <label
+                  htmlFor="userName"
+                  className="block text-sm font-medium text-gray-700"
                 >
-                    {({ values, errors, handleBlur, handleChange, handleSubmit, touched, isSubmitting }) => (
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div>
-                                <label>Username:</label><br />
-                                <input
-                                    type="text"
-                                    name="username"
-                                    value={values.username}
-                                    placeholder="Username"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    className={`w-full p-3 border rounded-md ${errors.username && touched.username ? 'border-red-500' : 'border-gray-300'}`}
-                                />
-                                {errors.username && touched.username && <span className="text-sm text-red-500">{errors.username}</span>}
-                            </div>
+                  Username
+                </label>
+                <Field
+                  id="userName"
+                  name="userName"
+                  type="text"
+                  className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="Enter your username"
+                  autoComplete="username"
+                />
+                <ErrorMessage
+                  name="userName"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
 
-                            <div className="relative">
-                                <label>Password:</label>
-                                <input
-                                    type={password ? "text" : "password"}
-                                    name="password"
-                                    value={values.password}
-                                    placeholder="Password"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    className={`w-full p-3 border rounded-md pr-10 ${errors.password && touched.password ? 'border-red-500' : 'border-gray-300'}`}
-                                />
-                                {errors.password && touched.password && <span className="text-sm text-red-500">{errors.password}</span>}
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Password
+                </label>
+                <Field
+                  id="password"
+                  name="password"
+                  type="password"
+                  className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="Enter your password"
+                  autoComplete="current-password"
+                />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
 
-                                <span
-                                    className="absolute right-2 bottom-1 transform -translate-y-1/2 cursor-pointer text-gray-400"
-                                    onClick={togglePassword}
-                                >
-                                    {password ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
-                                </span>
-                            </div>
+              {loginError && (
+                <div className="text-red-500 text-sm text-center">
+                  {loginError}
+                </div>
+              )}
 
-                            <button
-                                type="submit"
-                                disabled={isSubmitting}
-                                className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition duration-300 disabled:opacity-50"
-                            >
-                                Login
-                            </button>
-                        </form>
-                    )}
-                </Formik>
-            </div>
-        </div>
-    );
+              <button
+                type="submit"
+                className={`w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ${
+                  isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Logging in..." : "Admin Login"}
+              </button>
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </div>
+  );
 };
 
 export default Login;
-
-
